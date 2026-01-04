@@ -13,16 +13,9 @@ The pipeline utilizes a **weighted average ensemble** strategy. Through extensiv
 
 ### Key Contributions:
 
-* 
-**Diverse Attack Classes**: Expansion beyond standard 2D attacks to include 3D masks (HKBU-MARS V1+) and deepfakes (Celeb-DF v2).
-
-
-* 
-**Optimized Ensemble**: Implementation of a grid search technique to determine optimal weights for each model.
-
-
-* 
-**Robust Preprocessing**: Comprehensive pipeline involving face extraction, resizing, and extensive data augmentation (Color Jitter, Gaussian Noise, etc.) to enhance generalization.
+1. **Diverse Attack Classes**: Expansion beyond standard 2D attacks to include 3D masks (HKBU-MARS V1+) and deepfakes (Celeb-DF v2).
+2. **Optimized Ensemble**: Implementation of a grid search technique to determine optimal weights for each model.
+3. **Robust Preprocessing**: Comprehensive pipeline involving face extraction, resizing, and extensive data augmentation (Color Jitter, Gaussian Noise, etc.) to enhance generalization.
 
 ## Dataset
 
@@ -34,14 +27,12 @@ The models are trained and evaluated on a multi-class dataset categorized into:
 * `print`: High-resolution printed photo attacks.
 * `replay`: Video replay attacks on digital screens.
 
-*
-**In-house**: Print, Replay, Real.
 
-*
-**HKBU-MARS V1+**: 3D Mask.
+* **In-house**: Print, Replay, Real.
 
-*
-**Celeb-DF v2**: Deepfakes.
+* **HKBU-MARS V1+**: 3D Mask.
+
+* **Celeb-DF v2**: Deepfakes.
 
 **Comparison Datasets**: NUAA, iBeta Level 1, CASIA-SURF CeFA, Faceforensics++.
 
@@ -70,35 +61,22 @@ The ensemble model significantly outperformed individual architectures across tw
 | **YOLOv11s-cls** | 0.9642 | 0.1067 | 0.0177 | 0.0622 |
 | **EfficientNetV2-S** | 0.9332 | 0.2850 | 0.0102 | 0.1476 |
 | **Weighted Averaging Ensemble (Proposed)** | **0.9715** | **0.1025** | **0.0094** | **0.0559** |
-| 
 
- |  |  |  |  |
 
 ### Weight Optimization
 
 Grid search identified the following optimal weights for the ensemble:
 
-* 
-**YOLOv11 Weight**: 0.8920 (Scenario 1) / 0.8630 (Scenario 2).
-
-
-* 
-**EfficientNetV2 Weight**: 0.1080 (Scenario 1) / 0.1370 (Scenario 2).
+* **YOLOv11 Weight**: 0.8920 (Scenario 1) / 0.8630 (Scenario 2).
+* **EfficientNetV2 Weight**: 0.1080 (Scenario 1) / 0.1370 (Scenario 2).
 
 
 
 ## Methodology
 
-1. 
-**Preprocessing**: Video frames are converted to images, faces are cropped to focus on main features, and images are resized to .
-
-
-2. 
-**Training**: Individual models are trained in parallel using the **AdamW** optimizer and **CrossEntropyLoss**.
-
-
-3. 
-**Ensemble**: A weighted sum of class probabilities is computed, with the final class determined by the maximum cumulative score.
+1. **Preprocessing**: Video frames are converted to images, faces are cropped to focus on main features, and images are resized to 224x224.
+2. **Training**: Individual models are trained in parallel using the **AdamW** optimizer and **CrossEntropyLoss**.
+3. **Ensemble**: A weighted sum of class probabilities is computed, with the final class determined by the maximum cumulative score.
 
 
 
@@ -106,14 +84,9 @@ Grid search identified the following optimal weights for the ensemble:
 
 While the ensemble model provides superior accuracy, it involves a trade-off in speed.
 
-* 
-**YOLOv11 Inference**: ~0.37 - 0.44 ms.
-
-* 
-**EfficientNetV2 Inference**: ~1.71 - 1.72 ms.
-
-* 
-**Ensemble Inference**: ~2.07 ms.
+* **YOLOv11 Inference**: ~0.37 - 0.44 ms.
+* **EfficientNetV2 Inference**: ~1.71 - 1.72 ms.
+* **Ensemble Inference**: ~2.07 ms.
 
 ## Installation & Usage
 
@@ -143,6 +116,9 @@ pipeline = LivenessEnsemblePipeline(
     device="cuda"
 )
 
+# Evaluate on test set
+pipeline.evaluate(test_dataloader)
+
 ```
 
 ## Acknowledgments
@@ -155,7 +131,3 @@ If you use this work, please cite the original research:
 
 > 
 > **Tsabita Bayu Kandi & Vera Suryani**, "Liveness Detection Utilizing Ensemble Deep Learning Method for Biometric Authentication," Telkom University, 2025.
-> 
->
-# Evaluate on test set
-pipeline.evaluate(test_dataloader)
